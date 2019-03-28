@@ -51,7 +51,8 @@ def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True,
             print("mu = {0}".format(mu))
 
     # Convergence criterion.
-    norm = np.sum(M ** 2)
+    print(shape)
+    norm = np.sum(np.multiply(M, M))
 
     # Iterate.
     i = 0
@@ -78,7 +79,7 @@ def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True,
         Y += mu * step
 
         # Check for convergence.
-        err = np.sqrt(np.sum(step ** 2) / norm)
+        err = np.sqrt(np.sum(np.multiply(step,step)) / norm)
         if verbose:
             print(("Iteration {0}: error={1:.3e}, rank={2:d}, nnz={3:d}, "
                    "time={4:.3e}")
@@ -96,7 +97,7 @@ def shrink(M, tau):
     sgn = np.sign(M)
     S = np.abs(M) - tau
     S[S < 0.0] = 0.0
-    return sgn * S
+    return np.multiply(sgn, S)
 
 
 def _svd(method, X, rank, tol, **args):
